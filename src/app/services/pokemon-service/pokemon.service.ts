@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
 import { Observable, tap, of, catchError } from 'rxjs';
+import { Pokemon } from 'src/app/pokemon';
 
 @Injectable({
   providedIn: 'root',
@@ -13,15 +14,16 @@ export class PokemonService {
   ) {}
 
   // TODO: any type return
-  getPokemonList(startId: number, endId: number): Observable<any[]>  {
+  getPokemonList(startId: number, endId: number): Observable<{ results: Pokemon[] }>  {
     let offset = startId - 1;
     let limit = endId - offset;
-    let url =  `${this.baseUrl}/pokemon?limit=${limit}&offset=${offset})`;
-
-    return this.http.get<any[]>(url)
+    let url =  `${this.baseUrl}/pokemon?offset=${offset}&limit=${limit})`;
+    
+    // TODO fix the typing on this
+    return this.http.get<{ results: Pokemon[] }>(url)
       .pipe(
         tap(_ => console.log(`fetched pokemon list`)),
-        catchError(this.handleError<any[]>('getPokemonList', []))
+        catchError(this.handleError<{ results: Pokemon[] }>('getPokemonList', { results: [] }))
       );
   }
 
