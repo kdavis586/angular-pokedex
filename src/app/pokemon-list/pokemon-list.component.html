@@ -3,7 +3,9 @@
 
     <ul class="pokemon-entries">
         <li *ngFor="let pokemon of pokemonList">
-            <span>{{pokemon.name}}</span>
+            <a routerLink="/detail/{{extractPokemonId(pokemon.url)}}">
+                {{pokemon.name}}
+            </a>
         </li>
     </ul>
 </div>
