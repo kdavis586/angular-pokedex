@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./pokemon-detail.component.css']
 })
 export class PokemonDetailComponent {
-
+  private baseUrl = ''; 
 }
+

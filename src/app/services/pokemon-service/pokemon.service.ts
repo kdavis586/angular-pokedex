@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
 import { Observable, tap, of, catchError } from 'rxjs';
-import { Pokemon } from 'src/app/pokemon';
+import { PokemonListItem } from 'src/app/pokemon-list-item';
 
 @Injectable({
   providedIn: 'root',
@@ -13,18 +13,29 @@ export class PokemonService {
     private http: HttpClient
   ) {}
 
-  // TODO: any type return
-  getPokemonList(startId: number, endId: number): Observable<{ results: Pokemon[] }>  {
+  /**
+   * Gets a list of pokemon from the pokemon api based on id. 
+   * @param startId The id of the first pokemon in the list (inclusive).
+   * @param endId The id of the last pokemon in the list (inclusive).
+   * @returns An Observable with a results attribute.  
+   */
+  getPokemonList(startId: number, endId: number): Observable<{ results: PokemonListItem[] }>  {
     let offset = startId - 1;
     let limit = endId - offset;
     let url =  `${this.baseUrl}/pokemon?offset=${offset}&limit=${limit})`;
     
-    // TODO fix the typing on this
-    return this.http.get<{ results: Pokemon[] }>(url)
+    return this.http.get<{ results: PokemonListItem[] }>(url)
       .pipe(
         tap(_ => console.log(`fetched pokemon list`)),
-        catchError(this.handleError<{ results: Pokemon[] }>('getPokemonList', { results: [] }))
+        catchError(this.handleError<{ results: PokemonListItem[] }>('getPokemonList', { results: [] }))
       );
+  }
+
+  /**
+   * 
+   */
+  getPokemonDetails(id:number) {
+    let url = `${this.baseUrl}/pokemon/${id}`;
   }
 
   /**
