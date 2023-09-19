@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
 import { Observable, tap, of, catchError } from 'rxjs';
 import { PokemonListItem } from 'src/app/pokemon-list-item';
+import { DefaultPokemonDetails, PokemonDetails } from 'src/app/pokemon-details';
 
 @Injectable({
   providedIn: 'root',
@@ -34,8 +35,14 @@ export class PokemonService {
   /**
    * 
    */
-  getPokemonDetails(id:number) {
+  getPokemonDetails(id:number): Observable<PokemonDetails> {
     let url = `${this.baseUrl}/pokemon/${id}`;
+
+    return this.http.get<PokemonDetails>(url)
+      .pipe(
+        tap(_ => console.log(`fetched details for pokemon id: ${id}`)),
+        catchError(this.handleError<PokemonDetails>('getPokemonDetails', DefaultPokemonDetails))
+      )
   }
 
   /**

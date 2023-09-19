@@ -19,7 +19,7 @@ export class PokemonListComponent implements OnInit {
   /**
    * Uses the PokemonService to populate pokemonList with information. 
    */
-  private getPokemonList() {
+  private getPokemonList(): void {
     this.pokemonService.getPokemonList(1, 151)
       .subscribe(response => {
         this.pokemonList = response.results;
