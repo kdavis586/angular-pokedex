@@ -3,9 +3,10 @@
 
     <ul class="pokemon-entries">
         <li *ngFor="let pokemon of pokemonList">
-            <a routerLink="/detail/{{extractPokemonId(pokemon.url)}}">
+            <a routerLink="/detail/{{pokemon.id}}">
                 {{pokemon.name}}
             </a>
+            <img src='{{pokemon.sprites.other["official-artwork"].front_default}}' width="50" height="50"/>
         </li>
     </ul>
 </div>

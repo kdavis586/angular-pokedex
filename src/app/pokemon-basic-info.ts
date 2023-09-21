@@ -1,4 +1,4 @@
-export interface PokemonListItem {
+export interface PokemonBasicInfo {
     name: string;
     url: string;
 }

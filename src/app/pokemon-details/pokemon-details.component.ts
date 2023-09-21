@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { PokemonDetails } from '../pokemon-details';
+import { PokemonDetailedInfo } from '../pokemon-detailed-info';
 import { PokemonService } from '../services/pokemon-service/pokemon.service';
 
 @Component({
@@ -9,7 +9,7 @@ import { PokemonService } from '../services/pokemon-service/pokemon.service';
   styleUrls: ['./pokemon-detail.component.css'],
 })
 export class PokemonDetailsComponent implements OnInit {
-  pokemonDetails?: PokemonDetails;
+  pokemonDetails?: PokemonDetailedInfo;
 
   constructor(
     private route: ActivatedRoute,
@@ -21,7 +21,12 @@ export class PokemonDetailsComponent implements OnInit {
   }
 
   private getPokemonDetails(): void {
-    let urlId = Number(this.route.snapshot.paramMap.get('id')); 
-    this.pokemonService.getPokemonDetails(urlId).subscribe(details => this.pokemonDetails = details);
+    let urlId = this.route.snapshot.paramMap.get('id'); 
+    if (!urlId) return;
+    this.pokemonService.getPokemonDetails(urlId).subscribe(details =>  {
+      if (details) {
+        this.pokemonDetails = details
+      }
+    });
   }
 }

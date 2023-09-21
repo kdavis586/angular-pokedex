@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
 import { Observable, tap, of, catchError } from 'rxjs';
-import { PokemonListItem } from 'src/app/pokemon-list-item';
-import { DefaultPokemonDetails, PokemonDetails } from 'src/app/pokemon-details';
+import { PokemonBasicInfo } from 'src/app/pokemon-basic-info';
+import { PokemonDetailedInfo } from 'src/app/pokemon-detailed-info';
 
 @Injectable({
   providedIn: 'root',
@@ -16,32 +16,32 @@ export class PokemonService {
 
   /**
    * Gets a list of pokemon from the pokemon api based on id. 
-   * @param startId The id of the first pokemon in the list (inclusive).
-   * @param endId The id of the last pokemon in the list (inclusive).
+   * @param limit The maximum amount of results to return. Default is 151 to represent the original gen 1 pokemon.
    * @returns An Observable with a results attribute.  
    */
-  getPokemonList(startId: number, endId: number): Observable<{ results: PokemonListItem[] }>  {
-    let offset = startId - 1;
-    let limit = endId - offset;
-    let url =  `${this.baseUrl}/pokemon?offset=${offset}&limit=${limit})`;
+  getPokemonList(limit: number): Observable<{ results: PokemonBasicInfo[] }>  {
+    const url = `${this.baseUrl}/pokemon?limit=${limit})`;
     
-    return this.http.get<{ results: PokemonListItem[] }>(url)
+    return this.http.get<{ results: PokemonBasicInfo[] }>(url)
       .pipe(
         tap(_ => console.log(`fetched pokemon list`)),
-        catchError(this.handleError<{ results: PokemonListItem[] }>('getPokemonList', { results: [] }))
+        catchError(this.handleError<{ results: PokemonBasicInfo[] }>('getPokemonList', { results: [] }))
       );
   }
 
   /**
    * 
    */
-  getPokemonDetails(id:number): Observable<PokemonDetails> {
-    let url = `${this.baseUrl}/pokemon/${id}`;
+  getPokemonDetails(id: string): Observable<PokemonDetailedInfo | null> {
+    const url = `${this.baseUrl}/pokemon/${id}`;
 
-    return this.http.get<PokemonDetails>(url)
+    return this.http.get<PokemonDetailedInfo | null>(url)
       .pipe(
         tap(_ => console.log(`fetched details for pokemon id: ${id}`)),
-        catchError(this.handleError<PokemonDetails>('getPokemonDetails', DefaultPokemonDetails))
+        catchError(() => {
+          console.error(`An error occured while fetching details for pokemon with id ${id}`);
+          return of(null);
+        })
       )
   }
 
