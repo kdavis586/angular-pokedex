@@ -1,1 +1,9 @@
-<p>pokemon-search works!</p>
+<input #pokemonSearchInput type="text" (input)="onSearch(pokemonSearchInput.value)"/>
+<ul>
+    <li *ngFor="let pokemon of searchResults">
+        <a routerLink="/detail/{{pokemon.id}}">
+            {{pokemon.name}}
+        </a>
+        <img src='{{pokemon.sprites.other["official-artwork"].front_default}}' width="50" height="50"/>
+    </li>
+</ul>

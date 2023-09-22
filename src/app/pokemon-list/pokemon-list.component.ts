@@ -25,7 +25,7 @@ export class PokemonListComponent implements OnInit {
     this.pokemonService.getPokemonList(limit)
       .subscribe(response => {
         response.results.forEach((pokemonBasicInfo: PokemonBasicInfo) => {
-          const id = this.extractPokemonId(pokemonBasicInfo.url);
+          const id = this.pokemonService.extractPokemonId(pokemonBasicInfo.url);
           this.pokemonService.getPokemonDetails(id).subscribe((details: (PokemonDetailedInfo | null)) => {
             if (details) {
               this.pokemonList.push(details);
@@ -36,14 +36,4 @@ export class PokemonListComponent implements OnInit {
       });
   }
 
-  /**
-   * Takes the endpoint for a specific pokemon and returns the id portion of the string.
-   *  
-   * @param url The pokemon url to extract the id from
-   * @returns The pokemon id
-   */
-  extractPokemonId(url:string): string {
-    const parts = url.split('/');
-    return parts[parts.length - 2];
-  }
 }
